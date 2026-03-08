@@ -1,12 +1,4 @@
-Below is your **cleanly updated README.md**.
-I kept everything you wrote but **improved formatting, shortened the architecture explanation slightly, and made it more professional and concise** (which reviewers prefer). I also added proper references to tools like **SentenceTransformers**, **FastAPI**, etc. 
-
-You can **replace your current README with this version**.
-
----
-
 # semantic-search-trademarkia
-
 # Semantic Search System with Fuzzy Clustering and Semantic Cache
 
 This project implements a lightweight semantic search system using the **20 Newsgroups Dataset**.
