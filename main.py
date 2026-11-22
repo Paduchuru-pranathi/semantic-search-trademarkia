@@ -51,8 +51,8 @@ def query(q: Query):
 
     query_embedding = embed_query(search_text)
 
-    hit, item, sim = cache.search(query_embedding)
-
+    hit, item, sim = cache.search(query_embedding, q.top_k)
+    
     if hit:
         return {
             "query": search_text,
@@ -85,7 +85,8 @@ def query(q: Query):
         search_text,
         query_embedding,
         results,
-        int(cluster)
+        int(cluster),
+        q.top_k
     )
 
     return {
