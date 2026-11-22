@@ -59,7 +59,7 @@ def query(q: Query):
             "cache_hit": True,
             "matched_query": item["query"],
             "similarity_score": float(sim),
-            "result": item["result"],
+            "result": item["result"][:q.top_k],
             "dominant_cluster": item["cluster"]
         }
 
