@@ -73,7 +73,7 @@ class SemanticCache:
 
             "result": result,
 
-            "cluster": cluster
+            "cluster": cluster,
             "top_k": top_k
             
         })
