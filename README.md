@@ -270,6 +270,3 @@ Several enhancements could further improve the system:
 * Distributed caching using **Redis**
 * Containerized deployment using **Docker**
 
----
-
-If you want, I can also give you **the exact 6-minute Loom video script based on this README**, so you can record your explanation smoothly without missing anything.
