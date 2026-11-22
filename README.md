@@ -241,7 +241,7 @@ pip install -r requirements.txt
 ### Run the server
 
 ```
-uvicorn api.main:app --reload
+uvicorn main:app --reload
 ```
 
 ### Open API documentation
