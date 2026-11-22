@@ -12,7 +12,7 @@ class SemanticCache:
         self.hit_count = 0
         self.miss_count = 0
 
-    def search(self, embedding):
+    def search(self, embedding, top_k=5):
 
         best_similarity = 0.0
         best_match = None
@@ -23,7 +23,8 @@ class SemanticCache:
         )
 
         for item in self.cache:
-
+            if item.get("top_k", 5) < top_k:
+                continue
             cached_vector = np.asarray(
                 item["embedding"],
                 dtype=np.float32
@@ -60,8 +61,7 @@ class SemanticCache:
 
         return False, None, best_similarity
 
-    def add(self, query, embedding, result, cluster):
-
+    def add(self, query, embedding, result, cluster, top_k=5):
         self.cache.append({
 
             "query": query,
@@ -74,7 +74,8 @@ class SemanticCache:
             "result": result,
 
             "cluster": cluster
-
+            "top_k": top_k
+            
         })
 
     def stats(self):
