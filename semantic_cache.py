@@ -1,4 +1,6 @@
-from sklearn.metrics.pairwise import cosine_similarity
+
+import numpy as np
+
 
 class SemanticCache:
 
@@ -10,66 +12,97 @@ class SemanticCache:
         self.hit_count = 0
         self.miss_count = 0
 
-
     def search(self, embedding):
 
-        best_similarity = 0
+        best_similarity = 0.0
         best_match = None
+
+        query_vector = np.asarray(
+            embedding,
+            dtype=np.float32
+        )
 
         for item in self.cache:
 
-            sim = cosine_similarity(
-                [embedding],
-                [item["embedding"]]
-            )[0][0]
+            cached_vector = np.asarray(
+                item["embedding"],
+                dtype=np.float32
+            )
 
-            if sim > best_similarity:
+            denominator = (
+                np.linalg.norm(query_vector)
+                * np.linalg.norm(cached_vector)
+            )
 
-                best_similarity = sim
+            if denominator == 0:
+                similarity = 0.0
+            else:
+                similarity = float(
+                    np.dot(query_vector, cached_vector)
+                    / denominator
+                )
+
+            if similarity > best_similarity:
+
+                best_similarity = similarity
                 best_match = item
 
-
-        if best_similarity >= self.threshold:
+        if (
+            best_match is not None
+            and best_similarity >= self.threshold
+        ):
 
             self.hit_count += 1
 
             return True, best_match, best_similarity
 
-
         self.miss_count += 1
 
         return False, None, best_similarity
-
 
     def add(self, query, embedding, result, cluster):
 
         self.cache.append({
 
             "query": query,
-            "embedding": embedding,
+
+            "embedding": np.asarray(
+                embedding,
+                dtype=np.float32
+            ).copy(),
+
             "result": result,
+
             "cluster": cluster
 
         })
-
 
     def stats(self):
 
         total = self.hit_count + self.miss_count
 
-        hit_rate = self.hit_count / total if total > 0 else 0
+        hit_rate = (
+            self.hit_count / total
+            if total > 0
+            else 0.0
+        )
 
         return {
 
             "total_entries": len(self.cache),
-            "hit_count": self.hit_count,
-            "miss_count": self.miss_count,
-            "hit_rate": hit_rate
-        }
 
+            "hit_count": self.hit_count,
+
+            "miss_count": self.miss_count,
+
+            "hit_rate": hit_rate
+
+        }
 
     def clear(self):
 
-        self.cache = []
+        self.cache.clear()
+
         self.hit_count = 0
+
         self.miss_count = 0
